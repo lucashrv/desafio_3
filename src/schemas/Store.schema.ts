@@ -8,7 +8,7 @@ export enum StoreType {
 
 @Schema({ _id: false })
 export class Address {
-    @Prop({ required: true, maxlength: 8 })
+    @Prop({ required: true, maxlength: 9 })
     zip_code: string;
 
     @Prop({ required: true })
@@ -47,7 +47,7 @@ export class Store extends Document {
     email: string;
 
     @Prop({ required: true })
-    phoneNumber: number;
+    phoneNumber: string;
 
     @Prop({ required: true })
     takeOutInStore: boolean;
