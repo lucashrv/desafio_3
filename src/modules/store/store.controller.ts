@@ -16,8 +16,8 @@ export class StoreController {
 
     @Post("store")
     @UsePipes(new ValidationPipe())
-    async createStore(@Body() createStoreDto: CreateStoreDto): Promise<Store> {
-        return await this.storeService.createStore(createStoreDto);
+    async createStore(@Body() body: CreateStoreDto): Promise<Store> {
+        return await this.storeService.createStore(body);
     }
 
     @Get("stores")
