@@ -4,6 +4,7 @@ import { StoreController } from "./store.controller";
 import { MongooseModule } from "@nestjs/mongoose";
 import { Store, StoreSchema } from "src/schemas/Store.schema";
 import { StoreRepository } from "src/repositories/store.repository";
+import { HttpModule } from "@nestjs/axios";
 
 @Module({
     imports: [
@@ -13,6 +14,7 @@ import { StoreRepository } from "src/repositories/store.repository";
                 schema: StoreSchema,
             },
         ]),
+        HttpModule,
     ],
     providers: [StoreService, StoreRepository],
     controllers: [StoreController],

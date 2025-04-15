@@ -15,6 +15,9 @@ export class Address {
     street: string;
 
     @Prop({ type: String, required: true })
+    number: string;
+
+    @Prop({ type: String, required: true })
     neighborhood: string;
 
     @Prop({ type: String, required: true })
@@ -49,7 +52,7 @@ export class Store extends Document {
     @Prop({ type: String, required: true })
     phoneNumber: string;
 
-    @Prop({ type: Boolean, required: true })
+    @Prop({ type: Boolean, required: true, default: false })
     takeOutInStore: boolean;
 
     @Prop({ type: Number, required: true })
