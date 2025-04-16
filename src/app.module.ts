@@ -7,8 +7,8 @@ import { StoreModule } from "./modules/store/store.module";
     imports: [
         ConfigModule.forRoot({ isGlobal: true }),
         MongooseModule.forRootAsync({
-            useFactory: (config: ConfigService) => ({
-                uri: config.get<string>("MONGO_URI"),
+            useFactory: () => ({
+                uri: process.env.MONGO_URI,
             }),
             inject: [ConfigService],
         }),

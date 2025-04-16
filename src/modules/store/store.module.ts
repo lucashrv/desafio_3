@@ -3,8 +3,12 @@ import { StoreService } from "./store.service";
 import { StoreController } from "./store.controller";
 import { MongooseModule } from "@nestjs/mongoose";
 import { Store, StoreSchema } from "src/schemas/Store.schema";
-import { StoreRepository } from "src/repositories/store.repository";
+import { StoreRepository } from "./repository/store.repository";
 import { HttpModule } from "@nestjs/axios";
+import { ViaCepService } from "src/shared/integrations/via-cep.service";
+import { NominatimService } from "src/shared/integrations/nominatim.service";
+import { GoogleRoutesService } from "src/shared/integrations/google-routes.service";
+import { MelhorEnvioService } from "src/shared/integrations/melhor-envio.service";
 
 @Module({
     imports: [
@@ -16,7 +20,14 @@ import { HttpModule } from "@nestjs/axios";
         ]),
         HttpModule,
     ],
-    providers: [StoreService, StoreRepository],
+    providers: [
+        StoreService,
+        StoreRepository,
+        ViaCepService,
+        NominatimService,
+        GoogleRoutesService,
+        MelhorEnvioService,
+    ],
     controllers: [StoreController],
 })
 export class StoreModule {}
