@@ -39,4 +39,17 @@ export class StoreController {
     ): Promise<StoreByCepResponse> {
         return await this.storeService.findStoresByCep(cep, query);
     }
+
+    @Get("store/:id")
+    async findStoreById(@Param("id") id: string): Promise<Store> {
+        return await this.storeService.findStoreById(id);
+    }
+
+    @Get("stores/state/:state")
+    async findStoreByState(
+        @Param("state") state: string,
+        @Query() query: PaginationQueryDto,
+    ): Promise<StoreFindAllResponse> {
+        return await this.storeService.findStoreByState(state, query);
+    }
 }

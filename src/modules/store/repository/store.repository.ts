@@ -4,6 +4,7 @@ import { Store } from "src/schemas/Store.schema";
 import { CreateStoreDto } from "src/modules/store/dtos/create-store.dto";
 import { PaginationQueryDto } from "../dtos/pagination-query.dto";
 import { StoreFindAllResponse } from "../interfaces/store-find-all.interface";
+import { NotFoundException } from "@nestjs/common";
 
 export class StoreRepository {
     constructor(
@@ -17,8 +18,8 @@ export class StoreRepository {
     }
 
     async findAll(query: PaginationQueryDto): Promise<StoreFindAllResponse> {
-        const limit = +query.limit || 10;
-        const offset = +query.offset || 0;
+        const limit = +query.limit;
+        const offset = +query.offset;
 
         const [stores, total] = await Promise.all([
             this.storeModel.find().skip(offset).limit(limit).exec(),
@@ -30,6 +31,39 @@ export class StoreRepository {
             limit,
             offset,
             total,
+        };
+    }
+
+    async findById(id: string): Promise<Store> {
+        const store = await this.storeModel.findOne({ _id: id }).exec();
+
+        if (!store) {
+            throw new NotFoundException(`Loja não encontrada`);
+        }
+
+        return store;
+    }
+
+    async findByState(
+        state: string,
+        query: PaginationQueryDto,
+    ): Promise<StoreFindAllResponse> {
+        const limit = +query.limit;
+        const offset = +query.offset;
+
+        const regex = new RegExp(`^${state}$`, "i");
+
+        const stores = await this.storeModel
+            .find({ "address.state": regex })
+            .skip(offset)
+            .limit(limit)
+            .exec();
+
+        return {
+            stores,
+            limit,
+            offset,
+            total: stores.length,
         };
     }
 }

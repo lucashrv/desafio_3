@@ -145,4 +145,15 @@ export class StoreService {
             total: allStores.total,
         };
     }
+
+    async findStoreById(id: string): Promise<Store> {
+        return await this.storeRepository.findById(id);
+    }
+
+    async findStoreByState(
+        state: string,
+        query: PaginationQueryDto,
+    ): Promise<StoreFindAllResponse> {
+        return await this.storeRepository.findByState(state, query);
+    }
 }
