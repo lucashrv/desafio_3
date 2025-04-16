@@ -2,11 +2,17 @@ import { Injectable } from "@nestjs/common";
 import { Store } from "src/schemas/Store.schema";
 import { CreateStoreDto } from "./dtos/create-store.dto";
 import { StoreRepository } from "./repository/store.repository";
-import { Pin, StoreByCepResponse, StoreItem } from "./dtos/store-by-cep.dto";
+import {
+    Pin,
+    StoreByCepResponse,
+    StoreItem,
+} from "./interfaces/store-by-cep.interface";
 import { ViaCepService } from "src/shared/integrations/via-cep.service";
 import { NominatimService } from "src/shared/integrations/nominatim.service";
 import { GoogleRoutesService } from "src/shared/integrations/google-routes.service";
 import { MelhorEnvioService } from "src/shared/integrations/melhor-envio.service";
+import { PaginationQueryDto } from "./dtos/pagination-query.dto";
+import { StoreFindAllResponse } from "./interfaces/store-find-all.interface";
 
 @Injectable()
 export class StoreService {
@@ -49,11 +55,16 @@ export class StoreService {
         return await this.storeRepository.create(storeData);
     }
 
-    async findAllStores(): Promise<Store[]> {
-        return await this.storeRepository.findAll();
+    async findAllStores(
+        query: PaginationQueryDto,
+    ): Promise<StoreFindAllResponse> {
+        return await this.storeRepository.findAll(query);
     }
 
-    async findStoresByCep(cep: string): Promise<StoreByCepResponse> {
+    async findStoresByCep(
+        cep: string,
+        query: PaginationQueryDto,
+    ): Promise<StoreByCepResponse> {
         const cleanCep = cep.replace(/\D/g, "");
 
         const viaCep = await this.viaCepService.getAddressByCep(cep);
@@ -70,12 +81,12 @@ export class StoreService {
             lng: parseFloat(nominatim.lon),
         };
 
-        const allStores = await this.storeRepository.findAll();
+        const allStores = await this.storeRepository.findAll(query);
 
         const stores: StoreItem[] = [];
         const pins: Pin[] = [];
 
-        for (const store of allStores) {
+        for (const store of allStores.stores) {
             const storeCoords = {
                 lat: parseFloat(store.address.lat),
                 lng: parseFloat(store.address.long),
@@ -129,9 +140,9 @@ export class StoreService {
         return {
             stores,
             pins,
-            limit: stores.length,
-            offset: 1,
-            total: stores.length,
+            limit: allStores.limit,
+            offset: allStores.offset,
+            total: allStores.total,
         };
     }
 }

@@ -2,6 +2,8 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { Store } from "src/schemas/Store.schema";
 import { CreateStoreDto } from "src/modules/store/dtos/create-store.dto";
+import { PaginationQueryDto } from "../dtos/pagination-query.dto";
+import { StoreFindAllResponse } from "../interfaces/store-find-all.interface";
 
 export class StoreRepository {
     constructor(
@@ -13,7 +15,21 @@ export class StoreRepository {
 
         return await createStore.save();
     }
-    async findAll(): Promise<Store[]> {
-        return await this.storeModel.find().exec();
+
+    async findAll(query: PaginationQueryDto): Promise<StoreFindAllResponse> {
+        const limit = +query.limit || 10;
+        const offset = +query.offset || 0;
+
+        const [stores, total] = await Promise.all([
+            this.storeModel.find().skip(offset).limit(limit).exec(),
+            this.storeModel.countDocuments(),
+        ]);
+
+        return {
+            stores,
+            limit,
+            offset,
+            total,
+        };
     }
 }
