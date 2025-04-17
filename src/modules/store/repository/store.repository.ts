@@ -1,7 +1,7 @@
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import { Store } from "src/schemas/Store.schema";
-import { CreateStoreDto } from "src/modules/store/dtos/create-store.dto";
+import { Store } from "../../../schemas/Store.schema";
+import { CreateStoreDto } from "../dtos/create-store.dto";
 import { PaginationQueryDto } from "../dtos/pagination-query.dto";
 import { StoreFindAllResponse } from "../interfaces/store-find-all.interface";
 import { NotFoundException } from "@nestjs/common";

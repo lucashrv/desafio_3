@@ -9,6 +9,7 @@ import { ViaCepService } from "src/shared/integrations/via-cep.service";
 import { NominatimService } from "src/shared/integrations/nominatim.service";
 import { GoogleRoutesService } from "src/shared/integrations/google-routes.service";
 import { MelhorEnvioService } from "src/shared/integrations/melhor-envio.service";
+import { GoogleGeocodeService } from "src/shared/integrations/google-geocoding.service";
 
 @Module({
     imports: [
@@ -27,6 +28,7 @@ import { MelhorEnvioService } from "src/shared/integrations/melhor-envio.service
         NominatimService,
         GoogleRoutesService,
         MelhorEnvioService,
+        GoogleGeocodeService,
     ],
     controllers: [StoreController],
 })

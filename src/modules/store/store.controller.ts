@@ -33,7 +33,7 @@ export class StoreController {
     }
 
     @Get("stores/cep/:cep")
-    async getStoresByCep(
+    async findStoresByCep(
         @Param("cep") cep: string,
         @Query() query: PaginationQueryDto,
     ): Promise<StoreByCepResponse> {

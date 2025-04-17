@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { Store } from "src/schemas/Store.schema";
+import { Store } from "../../schemas/Store.schema";
 import { CreateStoreDto } from "./dtos/create-store.dto";
 import { StoreRepository } from "./repository/store.repository";
 import {
@@ -7,19 +7,19 @@ import {
     StoreByCepResponse,
     StoreItem,
 } from "./interfaces/store-by-cep.interface";
-import { ViaCepService } from "src/shared/integrations/via-cep.service";
-import { NominatimService } from "src/shared/integrations/nominatim.service";
-import { GoogleRoutesService } from "src/shared/integrations/google-routes.service";
-import { MelhorEnvioService } from "src/shared/integrations/melhor-envio.service";
+import { ViaCepService } from "../../shared/integrations/via-cep.service";
+import { GoogleRoutesService } from "../../shared/integrations/google-routes.service";
+import { MelhorEnvioService } from "../../shared/integrations/melhor-envio.service";
 import { PaginationQueryDto } from "./dtos/pagination-query.dto";
 import { StoreFindAllResponse } from "./interfaces/store-find-all.interface";
+import { GoogleGeocodeService } from "../../shared/integrations/google-geocoding.service";
 
 @Injectable()
 export class StoreService {
     constructor(
         private storeRepository: StoreRepository,
         private readonly viaCepService: ViaCepService,
-        private readonly nominatimService: NominatimService,
+        private readonly googleGeocodeService: GoogleGeocodeService,
         private readonly googleRoutesService: GoogleRoutesService,
         private readonly melhorEnvioService: MelhorEnvioService,
     ) {}
@@ -29,14 +29,10 @@ export class StoreService {
             createStoreDto.address.zip_code,
         );
 
-        const nominatim = await this.nominatimService.getCoordinates({
-            logradouro: viaCep.logradouro,
-            number: createStoreDto.address.number,
-            bairro: viaCep.bairro,
-            localidade: viaCep.localidade,
-            estado: viaCep.estado,
-            country: createStoreDto.address.country,
-        });
+        const fullAddress = `${viaCep.logradouro}, ${createStoreDto.address.number} - ${viaCep.bairro}, ${viaCep.localidade}, ${viaCep.estado}, ${createStoreDto.address.country}`;
+
+        const geocoding =
+            await this.googleGeocodeService.getCoordsFromAddress(fullAddress);
 
         const storeData: CreateStoreDto = {
             ...createStoreDto,
@@ -46,9 +42,9 @@ export class StoreService {
                 neighborhood: viaCep.bairro,
                 city: viaCep.localidade,
                 state: viaCep.estado,
-                lat: nominatim.lat,
-                long: nominatim.lon,
-                fullAddress: `${viaCep.logradouro}, ${createStoreDto.address.number} - ${viaCep.bairro}, ${viaCep.localidade}, ${viaCep.estado}, ${createStoreDto.address.country}`,
+                lat: geocoding.lat,
+                long: geocoding.lng,
+                fullAddress,
             },
         };
 
@@ -69,16 +65,14 @@ export class StoreService {
 
         const viaCep = await this.viaCepService.getAddressByCep(cep);
 
-        const nominatim = await this.nominatimService.getCoordinates({
-            logradouro: viaCep.logradouro,
-            bairro: viaCep.bairro,
-            localidade: viaCep.localidade,
-            estado: viaCep.estado,
-        });
+        const fullAddress = `${viaCep.logradouro}, ${viaCep.bairro}, ${viaCep.localidade}, ${viaCep.estado}`;
+
+        const geocoding =
+            await this.googleGeocodeService.getCoordsFromAddress(fullAddress);
 
         const destinationCoords = {
-            lat: parseFloat(nominatim.lat),
-            lng: parseFloat(nominatim.lon),
+            lat: parseFloat(geocoding.lat),
+            lng: parseFloat(geocoding.lng),
         };
 
         const allStores = await this.storeRepository.findAll(query);
@@ -137,8 +131,12 @@ export class StoreService {
             });
         }
 
+        const storesSorted = stores.sort(
+            (a, b) => parseFloat(a.distance) - parseFloat(b.distance),
+        );
+
         return {
-            stores,
+            stores: storesSorted,
             pins,
             limit: allStores.limit,
             offset: allStores.offset,

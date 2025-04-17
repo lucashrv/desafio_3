@@ -9,7 +9,7 @@ import {
     Min,
     ValidateNested,
 } from "class-validator";
-import { StoreType } from "src/schemas/Store.schema";
+import { StoreType } from "../../../schemas/Store.schema";
 import { AddressDto } from "./address.dto";
 import { Type } from "class-transformer";
 
