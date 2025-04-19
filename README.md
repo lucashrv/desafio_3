@@ -20,6 +20,7 @@ O projeto consiste em desenvolver uma **estimativa de frete eficiente** baseado 
 - **NestJS** + **Node.js**
 - **TypeScript**
 - **MongoDB** com **Mongoose**
+- **Google Maps Geocode API** (cálculo de coordenadas)
 - **Google Maps Routes API** (cálculo de distância)
 - **ViaCEP API** (busca de endereço pelo CEP)
 - **Melhor Envio API** (valores e prazos de Sedex e PAC)
