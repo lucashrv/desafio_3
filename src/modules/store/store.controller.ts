@@ -15,10 +15,11 @@ import { StoreByCepResponse } from "./interfaces/store-by-cep.interface";
 import { PaginationQueryDto } from "./dtos/pagination-query.dto";
 import { StoreFindAllResponse } from "./interfaces/store-find-all.interface";
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { IStoreController } from "./interfaces/store-controller.interface";
 
 @ApiTags("Store")
 @Controller("api")
-export class StoreController {
+export class StoreController implements IStoreController {
     constructor(private storeService: StoreService) {}
 
     @Post("store")

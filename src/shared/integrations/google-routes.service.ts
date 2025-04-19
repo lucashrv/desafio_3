@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { HttpService } from "@nestjs/axios";
 import { lastValueFrom } from "rxjs";
 
-export interface Adress {
+export interface Address {
     logradouro: string;
     number?: string;
     bairro: string;

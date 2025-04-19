@@ -10,6 +10,7 @@ async function bootstrap() {
         new ValidationPipe({ transform: true, whitelist: true }),
     );
 
+    // SWAGGER
     const config = new DocumentBuilder()
         .setTitle("Physical Store")
         .setDescription("Documentação da API com Swagger")

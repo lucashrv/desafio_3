@@ -108,6 +108,9 @@ describe("StoreService", () => {
             expect(
                 googleGeocodeService.getCoordsFromAddress,
             ).toHaveBeenCalled();
+            expect(storeRepository.create).toHaveBeenCalledWith(
+                expect.any(Object),
+            );
             expect(result).toEqual(createStoreDtoMock);
         });
     });
@@ -129,9 +132,6 @@ describe("StoreService", () => {
                 paginationQuery,
             );
 
-            expect(result.stores.length).toBe(2);
-            expect(result.stores[0].type).toBe("PDV");
-            expect(result.stores[1].type).toBe("LOJA");
             expect(viaCepService.getAddressByCep).toHaveBeenCalledWith(cep);
             expect(
                 googleGeocodeService.getCoordsFromAddress,
@@ -143,6 +143,11 @@ describe("StoreService", () => {
                 "99999999",
                 "12345678",
             );
+            expect(result.stores.length).toBe(2);
+            expect(result.stores[0].type).toBe("PDV");
+            expect(result.stores[1].type).toBe("LOJA");
+            expect(result.stores[0]).toHaveProperty("distance");
+            expect(result.stores[0].value[0]).toHaveProperty("price");
         });
     });
 

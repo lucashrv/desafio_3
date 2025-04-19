@@ -5,8 +5,9 @@ import { CreateStoreDto } from "../dtos/create-store.dto";
 import { PaginationQueryDto } from "../dtos/pagination-query.dto";
 import { StoreFindAllResponse } from "../interfaces/store-find-all.interface";
 import { NotFoundException } from "@nestjs/common";
+import { IStoreRepository } from "../interfaces/store-repository.interface";
 
-export class StoreRepository {
+export class StoreRepository implements IStoreRepository {
     constructor(
         @InjectModel(Store.name) private readonly storeModel: Model<Store>,
     ) {}

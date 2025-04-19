@@ -13,9 +13,10 @@ import { MelhorEnvioService } from "../../shared/integrations/melhor-envio.servi
 import { PaginationQueryDto } from "./dtos/pagination-query.dto";
 import { StoreFindAllResponse } from "./interfaces/store-find-all.interface";
 import { GoogleGeocodeService } from "../../shared/integrations/google-geocoding.service";
+import { IStoreService } from "./interfaces/store-service.interface";
 
 @Injectable()
-export class StoreService {
+export class StoreService implements IStoreService {
     constructor(
         private storeRepository: StoreRepository,
         private readonly viaCepService: ViaCepService,

@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { HttpService } from "@nestjs/axios";
 import { lastValueFrom } from "rxjs";
 
-export interface Adress {
+export interface Address {
     logradouro: string;
     number?: string;
     bairro: string;
@@ -15,7 +15,7 @@ export interface Adress {
 export class NominatimService {
     constructor(private readonly httpService: HttpService) {}
 
-    async getCoordinates(address: Adress): Promise<any> {
+    async getCoordinates(address: Address): Promise<any> {
         const nominatim = await lastValueFrom(
             this.httpService.get(
                 `https://nominatim.openstreetmap.org/search?q=${address.logradouro},${address.number || ""},${address.bairro},${address.localidade},${address.estado},${address.country || ""}&format=json`,
