@@ -114,6 +114,7 @@ export class StoreService implements IStoreService {
                 const fretes = await this.melhorEnvioService.calculateShipping(
                     store.address.zip_code,
                     cleanCep,
+                    store.shippingTimeInDays,
                 );
 
                 stores.push({

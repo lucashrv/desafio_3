@@ -9,7 +9,11 @@ export class MelhorEnvioService {
 
     constructor(private readonly httpService: HttpService) {}
 
-    async calculateShipping(from: string, to: string) {
+    async calculateShipping(
+        from: string,
+        to: string,
+        shippingTimeInDays: number,
+    ) {
         const url = "https://melhorenvio.com.br/api/v2/me/shipment/calculate";
 
         const headers = {
@@ -50,7 +54,7 @@ export class MelhorEnvioService {
                 return {
                     codProdutoAgencia: item.id,
                     description: item.name,
-                    prazo: `${item.delivery_time} dias úteis`,
+                    prazo: `${item.delivery_time + shippingTimeInDays} dias úteis`,
                     price: `R$ ${item.price}`,
                 };
             }
