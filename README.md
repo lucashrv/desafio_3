@@ -54,4 +54,57 @@ $ npm run start:prod
 
 ---
 
+## 🧪 Rodar os Testes
+
+```bash
+# Executar todos os testes unitários
+$ npm run test
+
+# Executar todos os testes unitários em modo watch
+$ npm run test:watch
+
+# Ver cobertura de testes
+$ npm run test:cov
+```
+
+---
+
 ## 📌 Estrutura do Projeto
+
+src/  
+│  
+├── modules/  
+│   └── store/    
+│       ├── repository/  
+│       ├── dtos/  
+│       ├── interfaces/  
+│       └── specs/  
+│  
+├── schemas/  
+├── shared/  
+│   ├── integrations/  
+│  
+├── main.ts  
+└── app.module.ts  
+
+---
+
+## 📚 Documentação da API
+
+A documentação da API está disponível via Swagger:
+
+    Após rodar o projeto, acesse: http://localhost:<PORT>/api
+
+---
+
+## 🔍 Principais Endpoints
+
+    POST /api/stores — Cria uma nova loja
+
+    GET /api/stores — Lista todas as lojas com paginação
+
+    GET /api/stores/:id — Busca loja por ID
+
+    GET /api/stores/state/:state — Filtra lojas por estado
+
+    GET /api/stores/nearby/:cep — Retorna lojas com opções de fretes com base no Cep requisitado
