@@ -52,19 +52,20 @@ describe("MelhorEnvioService", () => {
             const result = await melhorEnvioService.calculateShipping(
                 "12345678",
                 "87654321",
+                1,
             );
 
             expect(result).toEqual([
                 {
                     codProdutoAgencia: "123",
                     description: "PAC",
-                    prazo: "5 dias úteis",
+                    prazo: "6 dias úteis",
                     price: "R$ 20.00",
                 },
                 {
                     codProdutoAgencia: "456",
                     description: "SEDEX",
-                    prazo: "2 dias úteis",
+                    prazo: "3 dias úteis",
                     price: "R$ 35.00",
                 },
             ]);
@@ -85,6 +86,7 @@ describe("MelhorEnvioService", () => {
             const result = await melhorEnvioService.calculateShipping(
                 "00000000",
                 "11111111",
+                1,
             );
 
             expect(result).toEqual([

@@ -131,6 +131,7 @@ describe("StoreService", () => {
                 cep,
                 paginationQuery,
             );
+            console.log(result);
 
             expect(viaCepService.getAddressByCep).toHaveBeenCalledWith(cep);
             expect(
@@ -142,6 +143,7 @@ describe("StoreService", () => {
             expect(melhorEnvioService.calculateShipping).toHaveBeenCalledWith(
                 "99999999",
                 "12345678",
+                1,
             );
             expect(result.stores.length).toBe(2);
             expect(result.stores[0].type).toBe("PDV");
