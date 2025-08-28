@@ -1,4 +1,4 @@
-# 📦 Physical Store - Desafio 3 Compass
+# 📦 Physical Store
 
 ## Descrição
 
